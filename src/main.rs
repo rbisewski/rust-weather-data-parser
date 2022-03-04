@@ -95,7 +95,7 @@ fn main() -> io::Result<()> {
     for r in records {
         let diff = r.Temp - previous_temperature;
 
-        if difference.len() > 0 {
+        if !difference.is_empty() {
             let last = difference.len()-1;
 
             if (diff > 0.0 && difference[last] < 0.0) || (diff < 0.0 && difference[last] > 0.0) {
