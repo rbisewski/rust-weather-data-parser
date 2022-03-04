@@ -88,7 +88,30 @@ fn main() -> io::Result<()> {
 
     let records = convert_to_records(contents);
 
-    println!("Records:\n{:#?}",records);
+    //println!("Records:\n{:#?}",records);
+    let mut previous_temperature = 0.0;
+    let mut difference: Vec<f32> = Vec::new();
+    let mut times_changes = 0;
+    for r in records {
+        let diff = r.Temp - previous_temperature;
+
+        if difference.len() > 0 {
+            let last = difference.len()-1;
+
+            if (diff > 0.0 && difference[last] < 0.0) || (diff < 0.0 && difference[last] > 0.0) {
+                times_changes += 1;
+            }
+        }
+
+        difference.push(diff);
+
+        if times_changes == 2 {
+            println!("{}", r.Time);
+            break;
+        }
+
+        previous_temperature = r.Temp;
+    }
 
     Ok(())
 }
